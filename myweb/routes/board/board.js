@@ -22,7 +22,7 @@ connection.connect();
 //     res.sendFile(__dirname + '../../public/webform11.html');
 //   });
 
-app.post('/board/save.json', function (req, res) {
+app.post('/save.json', function (req, res) {
     var message = {};
     message.name = req.param('name');
     message.email = req.param('email');
@@ -32,13 +32,13 @@ app.post('/board/save.json', function (req, res) {
 
 
 // 상세보기
-app.get('/board/view.json', function(req, res) {
+app.get('/view.json', function(req, res) {
     var id = req.param('id');
     view(id, res);
 });
 
 // 목록보기
-app.get('/board/list.json', function(req, res) {
+app.get('/list.json', function(req, res) {
     var pageNo = req.param('pageNo');
     list(pageNo, res);
 });

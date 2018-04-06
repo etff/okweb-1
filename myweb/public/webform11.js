@@ -5,7 +5,7 @@ $(function () {
             dataType: 'json',
             data: $('#msgform').serialize()
         };
-        $.ajax('/board/save.json', settings)
+        $.ajax('/save.json', settings)
             .done(function (data) {
                 if (data.success) {
                     view(data.id);
@@ -18,7 +18,7 @@ $(function () {
         $('[id$=Panel]').hide();
         $('#viewPanel').show();
         $.ajax({
-            url: '/board/view.json',
+            url: '/view.json',
             dataType: 'json',
             cache: false,
             data: {
@@ -40,7 +40,7 @@ $(function () {
         $('[id$=Panel]').hide();
         $('#listPanel').show();
         $.ajax({
-            url: '/board/list.json',
+            url: '/list.json',
             dataType: 'json',
             data: {
                 pageNo: pageNo
