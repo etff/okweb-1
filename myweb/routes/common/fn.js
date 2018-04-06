@@ -5,10 +5,10 @@ var fn = {
         res.end('list page ' + no);
     },
     view: function(){
-
+        res.end('view');
     },
     delete: function() {
-        
+
     }
 };
  

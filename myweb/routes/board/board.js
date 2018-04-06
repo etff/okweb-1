@@ -1,10 +1,14 @@
+var express = require('express')
+var app = express()
+var router = express.Router()
+var path = require('path')
+var mysql = require('mysql')
+var bodyParser = require('body-parser');
 var http = require('http');
 var fs = require('fs');
 var url = require('url');
-var path = require('path');
-var express = require('express');
-var bodyParser = require('body-parser');
-var mysql = require('mysql');
+
+
 var connection = mysql.createConnection({
     host: 'localhost',
     database: 'devdb',
@@ -13,31 +17,12 @@ var connection = mysql.createConnection({
 });
 connection.connect();
 
-// 서버
-var app = express();
+//????
+// router.get('/board/*', function(req, res) {
+//     res.sendFile(__dirname + '../../public/webform11.html');
+//   });
 
-// request 파서
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({
-    extended: true
-}));
-
-// 정적인 파일 경로 public
-app.use(express.static(path.join(__dirname, 'public')));
-
-
-// 루트 경로 처리
-app.get('/', defaultPage);
-app.get('/write', defaultPage);
-app.get('/list/*', defaultPage);
-app.get('/view/*', defaultPage);
-
-function defaultPage(req, res) {
-    res.sendFile(__dirname + '/public/webform11.html');
-}
-
-// 저장 
-app.post('/save.json', function (req, res) {
+app.post('/board/save.json', function (req, res) {
     var message = {};
     message.name = req.param('name');
     message.email = req.param('email');
@@ -45,14 +30,15 @@ app.post('/save.json', function (req, res) {
     save(message, res);
 });
 
+
 // 상세보기
-app.get('/view.json', function(req, res) {
+app.get('/board/view.json', function(req, res) {
     var id = req.param('id');
     view(id, res);
 });
 
 // 목록보기
-app.get('/list.json', function(req, res) {
+app.get('/board/list.json', function(req, res) {
     var pageNo = req.param('pageNo');
     list(pageNo, res);
 });
@@ -72,6 +58,7 @@ function save(message, res) {
     });
     console.log(query.sql);
 }
+
 
 // 상세보기
 function view(id, res) {
@@ -132,15 +119,6 @@ function count(res, list) {
         res.send(resultObj);
     });
 }
-// 포트 지정
-app.set('port', process.env.PORT || 4000);
-// 서버 시작
-app.listen(app.get('port'), function () {
-    console.log('Server running at http://127.0.0.1:' + app.get('port'));
-});
 
-connection.end();
 
-process.on('uncaughtException', function (err) {
-    console.log(err);
-}); 
+module.exports = router;

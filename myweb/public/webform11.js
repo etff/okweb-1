@@ -1,12 +1,11 @@
-$(init);
-function init() {
+$(function () {
     $('#send').on('click', function () {
         var settings = {
             method: 'post',
             dataType: 'json',
             data: $('#msgform').serialize()
         };
-        $.ajax('/save.json', settings)
+        $.ajax('/board/save.json', settings)
             .done(function (data) {
                 if (data.success) {
                     view(data.id);
@@ -19,7 +18,7 @@ function init() {
         $('[id$=Panel]').hide();
         $('#viewPanel').show();
         $.ajax({
-            url: '/view.json',
+            url: '/board/view.json',
             dataType: 'json',
             cache: false,
             data: {
@@ -41,7 +40,7 @@ function init() {
         $('[id$=Panel]').hide();
         $('#listPanel').show();
         $.ajax({
-            url: '/list.json',
+            url: '/board/list.json',
             dataType: 'json',
             data: {
                 pageNo: pageNo
@@ -129,4 +128,4 @@ function init() {
     
     list(1);
 
-}
+});
