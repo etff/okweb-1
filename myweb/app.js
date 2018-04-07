@@ -56,14 +56,18 @@ var connection = mysql.createConnection({
 connection.connect();
 
 //미들웨어가 먼저 실행
-app.post('/save.json', upload.single('file'), function (req, res) {
+app.post('/save.json', function (req, res) {
   var message = {};
   message.name = req.param('name');
   message.email = req.param('email');
   message.message = req.param('msg');
-  message.file = req.param('file');
   
   save(message, res);
+});
+
+app.post('/upload', upload.single('userFile'), function(req, res){
+  res.send('Uploaded! : '+req.file); // object를 리턴함
+  console.log(req.file); // 콘솔(터미널)을 통해서 req.file Object 내용 확인 가능.
 });
 
 // 상세보기
