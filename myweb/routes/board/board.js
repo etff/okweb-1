@@ -22,7 +22,7 @@ connection.connect();
 //     res.sendFile(__dirname + '../../public/webform11.html');
 //   });
 
-app.post('/save.json', function (req, res) {
+app.post('/board/save.json', function (req, res) {
     var message = {};
     message.name = req.param('name');
     message.email = req.param('email');

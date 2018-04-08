@@ -5,6 +5,7 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
+var multer = require('multer');
 var index = require('./routes/index');
 var users = require('./routes/users');
 var member = require('./routes/member');
@@ -34,6 +35,27 @@ app.get('/link', function (req, res) {
 app.post('/link', function (req, res) {
   res.send('Hello World Post!')
 })
+var done = false;
+app.use(multer({
+  dest: './public/uploads/',
+  rename: function (fieldname, filename) {
+      return Date.now();
+  },
+  onFileUploadStart: function (file) {
+      console.log(file.originalname + ' is starting ...')
+  },
+  onFileUploadComplete: function (file) {
+      console.log(file.fieldname + ' uploaded to  ' + file.path)
+      done = true;
+  }
+}).any());
+
+
+app.post('/api/photo', function (req, res) {
+      console.log(req.files);
+      res.end(JSON.stringify(req.files));
+  
+});
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

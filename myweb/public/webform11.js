@@ -5,7 +5,7 @@ $(function () {
             dataType: 'json',
             data: $('#msgform').serialize()
         };
-        $.ajax('/save.json', settings)
+        $.ajax('/board/save.json', settings)
             .done(function (data) {
                 if (data.success) {
                     view(data.id);

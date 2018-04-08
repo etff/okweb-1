@@ -17,7 +17,7 @@ function defaultPage(req, res) {
   res.sendFile(path.join(__dirname, '../public/main.html'))
 }
 
-router.use('/main', main)   //라우터 정보를 받아서 그쪽으로 가라
+router.use('/main', main)   
 router.use('/email', email)
 router.use('/join',join)  
 router.use('/board',board)
