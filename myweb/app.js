@@ -65,10 +65,12 @@ app.post('/api/photo', function (req, res) {
   var filename = file.filename;
   var original = file.originalname;
   var size = file.size;
+  var name = req.req.param('name');
+  var message = req.req.param('message');
 
   connection.connect();
 
-  connection.query(`INSERT INTO board (id, filename, original, size, reg_date)
+  connection.query(`INSERT INTO board (id, name, filename, original, size, reg_date)
   VALUES (null, ?, ?, ?, ?, ?);`,
     [name, message, filename, original, size]
     , function (error, results, fields) {
