@@ -1,11 +1,13 @@
 $(function () {
     $('#send').on('click', function () {
+        event.preventDefault()
+         var name = $('#name').val();
+         var msg = $('#msg').val();    
         var settings = {
             method: 'post',
             dataType: 'json',
-            data: $('#msgform').serialize()
         };
-        $.ajax('/board/save.json', settings)
+        $.ajax('/api/photo', settings)
             .done(function (data) {
                 if (data.success) {
                     view(data.id);

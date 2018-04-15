@@ -7,24 +7,13 @@ var path = require('path');
 var cors = require('cors')
 var app = express();
 var router = require('./routes/index');
-var multer = require('multer');
-app.use('/user', express.static('uploads'));
 
-var _storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, './uploads/')
-  },
-  filename: function (req, file, cb) {
-    cb(null, file.originalname);
-  }
-})
 
-var upload = multer({ storage: _storage })
 var http = require('http');                     //???
 var createError = require('http-errors');       //???
 var cookieParser = require('cookie-parser');    //???
 var logger = require('morgan');                 //???
-
+var multer = require('multer');
 
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -45,6 +34,20 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(router)
 
+app.use(multer({
+  dest: './public/uploads/',
+  rename: function (fieldname, filename) {
+    return Date.now();
+  },
+  onFileUploadStart: function (file) {
+    console.log(file.originalname + ' is starting ...')
+  },
+  onFileUploadComplete: function (file) {
+    console.log(file.fieldname + ' uploaded to  ' + file.path)
+  }
+}).any());
+
+
 
 var mysql = require('mysql');
 var connection = mysql.createConnection({
@@ -55,19 +58,33 @@ var connection = mysql.createConnection({
 });
 connection.connect();
 
-//미들웨어가 먼저 실행
-app.post('/save.json', function (req, res) {
-  var message = {};
-  message.name = req.param('name');
-  message.email = req.param('email');
-  message.message = req.param('msg');
-  
-  save(message, res);
-});
 
-app.post('/upload', upload.single('userFile'), function(req, res){
-  res.send('Uploaded! : '+req.file); // object를 리턴함
-  console.log(req.file); // 콘솔(터미널)을 통해서 req.file Object 내용 확인 가능.
+
+app.post('/api/photo', function (req, res) {
+  var file = req.files[0];
+  var filename = file.filename;
+  var original = file.originalname;
+  var size = file.size;
+
+  connection.connect();
+
+  connection.query(`INSERT INTO board (id, filename, original, size, reg_date)
+  VALUES (null, ?, ?, ?, ?, ?);`,
+    [name, message, filename, original, size]
+    , function (error, results, fields) {
+      var resultObj = {};
+      if (err) {
+          resultObj.success = false;
+          console.log(err);
+      } else {
+          resultObj.success = true;
+          resultObj.id = result.insertId;
+      }
+      res.send(JSON.stringify(resultObj));
+    });
+
+  connection.end();
+  res.end(JSON.stringify(req.resultObj));
 });
 
 // 상세보기
